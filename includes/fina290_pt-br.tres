@@ -1,0 +1,86 @@
+0001#STR0001#ALL#Pesquisar
+0002#STR0002#ALL#Visualizar
+0003#STR0003#ALL#Selecionar
+0004#STR0004#ALL#Cancelar
+0005#STR0005#ALL#Aglutinaçäo de Titulos
+0006#STR0006#ALL#Confirma
+0007#STR0007#ALL#Redigita
+0008#STR0008#ALL#Abandona
+0009#STR0009#ALL#Faturas a Pagar
+0010#STR0010#ALL#Prefixo
+0011#STR0011#ALL#Número Fatura
+0012#STR0012#ALL#Natureza
+0013#STR0013#ALL#Moeda
+0014#STR0014#ALL#Emissão de
+0015#STR0015#ALL#Até
+0016#STR0016#ALL#Valor da Fatura
+0017#STR0017#ALL#Fornecedor
+0018#STR0018#ALL#Loja
+0019#STR0019#ALL#Selecionando Registros...
+0020#STR0020#ALL#Fatura a Pagar
+0021#STR0021#ALL#Prefixo: 
+0022#STR0022#ALL#Número: 
+0023#STR0023#ALL#Natureza: 
+0024#STR0024#ALL#Moeda: 
+0025#STR0025#ALL#Valor Fatura
+0026#STR0026#ALL#Valor Selecionado
+0027#STR0027#ALL#Tít. Selec.
+0028#STR0028#ALL#Fatura a Pagar - Parcelas a serem geradas
+0029#STR0029#ALL#Data Contabilizaçäo : 
+0030#STR0030#ALL#Condiçäo de Pagamento : 
+0031#STR0031#ALL#Valor Total:
+0032#STR0032#ALL#Prf
+0033#STR0033#ALL#Número
+0034#STR0034#ALL#Ord
+0035#STR0035#ALL#Vencimento
+0036#STR0036#ALL#Valor Duplicata
+0037#STR0037#ALL#Banco
+0038#STR0038#ALL#Cancelamento de Fatura a Pagar
+0039#STR0039#ALL#Fornecedor
+0040#STR0040#ALL#Loja
+0041#STR0041#ALL#Prefixo
+0042#STR0042#ALL#Número Título
+0043#STR0043#ALL#Total Notas
+0044#STR0044#ALL#Valor da Fatura
+0045#STR0045#ALL#Confirma Dados?
+0046#STR0046#ALL#Atençäo
+0047#STR0047#ALL#Confirma Cancelamento?
+0048#STR0048#ALL#Atençäo
+0049#STR0049#ALL#Informe valor correto da Fatura
+0050#STR0050#ALL#Valor : 
+0051#STR0051#ALL#Informe Condiçäo de Pagamento
+0052#STR0052#ALL#Condiçäo: 
+0053#STR0053#ALL#Tp
+0054#STR0054#ALL#Tipo
+0055#STR0055#ALL#Nr.Fatura
+0056#STR0056#ALL#Bx.Emis.Fatura 
+0057#STR0057#ALL#Gerar p/Fornecedor
+0058#STR0058#ALL#Nao e permitida alteracao do tipo do titulo. + CHR ( 13 ) + Deve-se manter o tipo definido no inicio da rotina
+0059#STR0059#ALL#Nao e permitida alteracao do numero do titulo.
+0060#STR0060#ALL#Deve-se manter o numero definido no inicio da rotina
+0061#STR0061#ALL#Valor das notas 
+0062#STR0062#ALL#Valor da fatura  
+0063#STR0063#ALL#Esta fatura possui parcela transferida para  + CHR ( 13 ) + banco. Retorne os titulos para carteira  + CHR ( 13 ) + antes de cancelar a fatura
+0064#STR0064#ALL#Número máximo de parcelas permitido 
+0065#STR0065#ALL#Número de parcelas da condição de pagto. 
+0066#STR0066#ALL#Verifique parâmetro MV_1DUP.
+0067#STR0067#ALL#Atenção
+0068#STR0068#ALL#Este titulo esta sendo utilizado em outro terminal, näo pode ser utilizado na fatura
+0069#STR0069#ALL#Cor.Monet./
+0070#STR0070#ALL#Pesquisar..(CTRL-P)
+0071#STR0071#ALL#Legenda
+0072#STR0072#ALL#Natureza bloqueada para novas movimentações
+0073#STR0073#ALL#Esta fatura possui um abatimento. Favor exclui-lo antes de cancelar a fatura.
+0074#STR0074#ALL#Este é um título de abatimento, não pode ser marcado/desmarcado, posicione sobre o titulo principal para esta operação
+0075#STR0075#ALL#Existem títulos que não foram localizados na geração da fatura
+0076#STR0076#ALL#Informe caracteres válidos no preenchimento dos campos
+0077#STR0077#ALL#Abatimentos
+0078#STR0078#ALL#Para a fatura será adotado o aprovador padrão para a moeda: 
+0079#STR0079#ALL#Controle de alçadas ativo
+0080#STR0080#ALL#O campo Emissão De deve ser preenchido.
+0081#STR0081#ALL#O campo Até deve ser maior ou igual ao campo Emissão De.
+0082#STR0082#ALL#O campo Até deve ser menor ou igual a 
+0083#STR0083#ALL#O campo Até deve ser preenchido.
+0084#STR0084#ALL#Informe o código do fornecedor e loja.
+0085#STR0085#ALL#O código de fornecedor e loja informados para geração estão bloqueados.
+0086#STR0086#ALL#O código de fornecedor e loja informados não estão cadastrados no sistema.

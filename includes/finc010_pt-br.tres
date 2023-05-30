@@ -1,0 +1,131 @@
+0001#STR0001#ALL#Pesquisar
+0002#STR0002#ALL#Visualizar
+0003#STR0003#ALL#Consultar
+0004#STR0004#ALL#Impressão
+0005#STR0005#ALL#Consulta Posição Clientes
+0006#STR0006#ALL#Código
+0007#STR0007#ALL#Loja
+0008#STR0008#ALL#Nome
+0009#STR0009#ALL#Telefone
+0010#STR0010#ALL#Saldo Historico
+0011#STR0011#ALL#Maior Compra
+0012#STR0012#ALL#Maior Saldo 
+0013#STR0013#ALL#Saldo Historico em 
+0014#STR0014#ALL#Limite Crédito
+0015#STR0015#ALL#Primeira Compra
+0016#STR0016#ALL#Última Compra
+0017#STR0017#ALL#Maior Atraso
+0018#STR0018#ALL#Média de Atraso
+0019#STR0019#ALL#Grau de Risco
+0020#STR0020#ALL#Cheques Devolvidos
+0021#STR0021#ALL#Titulos Protestados
+0022#STR0022#ALL#Quantidade
+0023#STR0023#ALL#Último Devolvido
+0024#STR0024#ALL#Último Protesto
+0025#STR0025#ALL#Tit Aberto
+0026#STR0026#ALL#Tit Recebidos
+0027#STR0027#ALL#Pedidos
+0028#STR0028#ALL#Faturamento
+0029#STR0029#ALL#Cheques
+0030#STR0030#ALL#Cons.Especif.
+0031#STR0031#ALL#Sair
+0032#STR0032#ALL#Qtd.Tit.
+0033#STR0033#ALL#Principal
+0034#STR0034#ALL#Saldo
+0035#STR0035#ALL#Atraso
+0036#STR0036#ALL#Qtd.Pag.
+0037#STR0037#ALL#Principal
+0038#STR0038#ALL#Vlr.Pagto
+0039#STR0039#ALL#Qtd.Ped.
+0040#STR0040#ALL#Tot.Pedido
+0041#STR0041#ALL#Tot.Liber.
+0042#STR0042#ALL#Sld.Pedido
+0043#STR0043#ALL#Qtd.Notas
+0044#STR0044#ALL#Tot.Fatur.
+0045#STR0045#ALL#Situacao
+0046#STR0046#ALL#Juros
+0047#STR0047#ALL#Pago
+0048#STR0048#ALL#Este programa irá imprimir a Consulta de um Cliente,
+0049#STR0049#ALL#informando os dados acumulados do Cliente, os Pedidos
+0050#STR0050#ALL#em aberto, Titulos em Aberto e relação do Faturamento.
+0051#STR0051#ALL#Zebrado
+0052#STR0052#ALL#Administração
+0053#STR0053#ALL#TITULOS EM ABERTO
+0054#STR0054#ALL#TITULOS RECEBIDOS
+0055#STR0055#ALL#PEDIDOS
+0056#STR0056#ALL#FATURAMENTO
+0057#STR0057#ALL#Vendedor
+0058#STR0058#ALL#Dados Concess
+0059#STR0059#ALL#Referências
+0060#STR0060#ALL#Não implementado
+0061#STR0061#ALL#Carteira de cheques
+0062#STR0062#ALL#Pendente
+0063#STR0063#ALL#Negociado
+0064#STR0064#ALL#Cobrado
+0065#STR0065#ALL#Selecionando registros no servidor
+0066#STR0066#ALL#PEND
+0067#STR0067#ALL#NEGO
+0068#STR0068#ALL#COBR
+0069#STR0069#ALL#Valores em 
+0070#STR0070#ALL#CANCELADO PELO OPERADOR
+0071#STR0071#ALL#Totais --> 
+0072#STR0072#ALL#Seleção de parâmetros
+0073#STR0073#ALL#Tipos de cheques a exibir
+0074#STR0074#ALL#Todos
+0075#STR0075#ALL#Saldo Sec.
+0076#STR0076#ALL#Lim.Cred.Sec.
+0077#STR0077#ALL#Descrição
+0078#STR0078#ALL#Valor
+0079#STR0086#ALL#Abatimentos
+0080#STR0087#ALL#Total : 
+0081#STR0088#ALL#Devolvido
+0082#STR0089#ALL#DEVO
+0083#STR0090#ALL#Considera Faturados?
+0084#STR0091#ALL#Acresc.
+0085#STR0092#ALL#Decresc.
+0086#STR0093#ALL#Pago em outra moeda
+0087#STR0094#ALL#Sem baixas
+0088#STR0095#ALL#Hist.Cobrança
+0089#STR0096#ALL#Total ====>>
+0090#STR0097#ALL#Consulta distribuição por moedas
+0091#STR0098#ALL#Qtde. Titulos
+0092#STR0099#ALL#Moeda
+0093#STR0100#ALL#Valor na moeda
+0094#STR0101#ALL#Valor em R$
+0095#STR0102#ALL#Distribuição por moeda
+0096#STR0103#ALL#Saldo na moeda tit
+0097#STR0104#ALL#Tot.Geral
+0098#STR0105#ALL#Bolet.Abertos
+0099#STR0106#ALL#Bolet.Pagos
+0100#STR0107#ALL#Extrato
+0101#STR0108#ALL#Registro Acadêmico
+0102#STR0109#ALL#Valor Parcelas
+0103#STR0110#ALL#Maior Parcela
+0104#STR0111#ALL#Primeira Parcela
+0105#STR0112#ALL#Última Parcela
+0106#STR0113#ALL#Titulo c/ Cheque Devolvido 
+0107#STR0114#ALL#Credito
+0108#STR0115#ALL#Ecossistema - Consulta a credito
+0109#STR0116#ALL#Este recurso efetua consulta aos servicos de parceiros via ecossistema. Deste modo, os parametros de filtro nao serao aplicados.
+0110#STR0117#ALL#Atencao
+0111#STR0118#ALL#Ok
+0112#STR0119#ALL#Co&nhecimento
+0113#STR0120#ALL#Saldo a Receber
+0114#STR0121#ALL#Baixado parcial
+0115#STR0122#ALL#Tit Baixados
+0116#STR0123#ALL#Bolet Baixados
+0117#STR0124#ALL#Pref
+0118#STR0125#ALL#Par
+0119#STR0126#ALL#Tx Perm
+0120#STR0127#ALL#Port
+0121#STR0128#ALL#Consulta Titulos em Aberto do Cliente - 
+0122#STR0129#ALL#Consulta Titulos Baixados do Cliente - 
+0123#STR0130#ALL#Favor Aguardar.....
+0124#STR0131#ALL#Exportando os Registros para o Excel
+0125#STR0132#ALL#Exportar dados para o Excel
+0126#STR0133#ALL#MsExcel nao instalado
+0127#STR0134#ALL#Em Transito
+0128#STR0135#ALL#TRAN
+0129#STR0136#ALL#Sem restrições
+0130#STR0137#ALL#Status Serasa
+0131#STR0138#ALL#Título no Serasa

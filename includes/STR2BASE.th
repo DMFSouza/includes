@@ -1,0 +1,92 @@
+
+/*----------------------------------------------------*
+ | Função: Str2Base                                   |
+ | Autor : D.Miguel                                   |
+ | Descr.: Função que retorna o valor de uma string   |
+ | convertido em bites binários ou hexadecimais.      |
+ | Parâmetros:Str2Base(<cBitStr>,<nOpc>)              |
+ | <cBitStr>                                          |
+ |  Tipo: Caracter                                    |
+ |  Desc: String a ser convertida                     |
+ | <nOpc>                                             |
+ |  Tipo: Numerico                                    |
+ |  Desc: 2-Para Binário e 16 para hexadecimal.       |
+ | Retorno: cRetStr                                   |
+ *-----------------------------------------------=-----*/
+//futuramente será adicionado mais bases de conversão.
+
+
+Interface Str4Base
+    Method Str2Base()
+EndInterface
+
+/*/{Protheus.doc} Query2Array
+description
+@type class
+@version  
+@author D.Miguel
+@since 2/12/2023
+/*/
+Class BaseConverter from Str4Base
+    PUBLIC Data cBitStr
+    PUBLIC Data nOpc
+    PUBLIC Data cRetStr
+
+    PUBLIC method new() Constructor
+    PUBLIC method Str2Base() Constructor
+    PUBLIC method BaseConv() Constructor
+
+ENDCLASS
+
+
+method new() class BaseConverter
+return self
+
+
+METHOD Str2Base() class BaseConverter
+::cRetStr
+::cBitStr
+::nOpc
+    // VALIDA O CONTEUDO ENVIADO E CONVERTE PARA BINARIO
+    If (ValType(::cBitStr) == "C" .And. !Empty(::cBitStr))
+        ::cBitStr := StrTran(Bin2Str(::cBitStr), Space(1), "0")
+        ::cBitStr := StrTran(::cBitStr, "x", "1")
+    EndIf
+    ::BaseConv(::cBitStr,::nOpc) 
+Return ::cRetStr
+
+METHOD BaseConv() class BaseConverter
+
+LOCAL nLineLength := 4, nTabSize := 3, lWrap := .F.
+Local aBitStr:={}
+Local nLine
+LOCAL nLines, nCurrentLine 
+Local aBin:={"0000","0001","0010","0011","0100","0101","0110","0111","1000","1001","1010","1011","1100","1101","1110","1111"} 
+Local aHex:={"0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"}
+nLines := MLCOUNT(::cBitStr, nLineLength, nTabSize, lWrap)
+    //FORMATA O BINARIO EM 4 BITS POR LINHA
+    FOR nCurrentLine := 1 TO nLines
+        aadd(aBitStr,MEMOLINE(::cBitStr, nLineLength, nCurrentLine, nTabSize, lWrap))
+    NEXT
+    nCurrentLine:=1
+    //CONVERTE O BINARIO EM HEXADECIMAL
+    Do While nCurrentLine<len(aBitStr)
+            For nCurrentLine:= 1 to len(aBitStr)
+                For nLine :=1 to len(aBin)
+                    if aBitStr[nCurrentLine] == aBin[nLine]
+                        aBitStr[nCurrentLine]:= aHex[nLine]
+                    Endif
+                next
+            Next
+    Enddo
+::cRetStr:=""
+//SE OPC=2 RETORNA BINARIO SE OPC =16 RETORNA HEXA
+    If ::nOpc==2
+        ::cRetStr:=::cBitStr
+    Elseif ::nOpc==16
+        For nCurrentLine:=1 to len(aBitStr)
+            ::cRetStr+=aBitStr[nCurrentLine]
+        Next
+    Endif
+
+Return ::cRetStr

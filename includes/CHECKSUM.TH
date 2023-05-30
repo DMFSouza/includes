@@ -1,0 +1,153 @@
+Interface FBCHECKSUM
+    Method CalculaChecksum()
+EndInterface
+
+CLASS CHECKSUM From FBCHECKSUM
+    PUBLIC Data cVar
+    PUBLIC Data cLin  
+    PUBLIC Data nLin
+    PUBLIC Data cXor
+    PUBLIC Data aXor
+    PUBLIC Data nLine
+    PUBLIC Data cMsg
+    PUBLIC Data cMsg2
+    PUBLIC Data aStr
+    PUBLIC Data aMsg
+    PUBLIC Data _x
+    PUBLIC Data cRetStr
+    PUBLIC Data nLengVar
+    PUBLIC Data nLenght
+
+
+    PUBLIC Data nCurrentLine
+    PUBLIC Data _n
+    PUBLIC Data nXor
+    PUBLIC Data vXor
+    PUBLIC Data _z
+    PUBLIC Data _y
+    PUBLIC Data aCheck
+    PUBLIC Data cCheck
+    PUBLIC Data _Msg
+    PUBLIC Data cCheck1
+    PUBLIC Data cCheck2
+    PUBLIC Data cCheck3
+    PUBLIC Data nLinha
+
+
+    PUBLIC method ResultadoChecksum() Constructor
+    public method new()
+    public method CalculaChecksum() Constructor
+ENDCLASS
+method new() class CHECKSUM
+
+return self
+
+Method CalculaChecksum() class CHECKSUM
+    Self:cVar   
+    Self:cLin 
+    self:cXor   :=''
+    self:aXor   :={}
+    self:cMsg   :=''
+    self:cMsg2  :=''
+    self:aStr   :={}
+    self:aMsg   :={}
+    self:_x     :=0
+    Self:cRetStr:=''
+
+    ::cMsg :=SubStr(::cVar,1,At("[DH/]",::cVar)-1)
+    ::cMsg := StrTran(::cMsg,"[N]","",1,)
+    ::cMsg := StrTran(::cMsg,"[/N]","",1,)
+    ::cMsg2:=SubStr(::cVar,At("CM",::cVar,))
+
+    AADD(::aStr,::cMsg)
+    AADD(::aStr,::cLin)
+    AADD(::aStr,::cMsg2)
+    For ::_x:=1 to len(::aStr)
+        aadd(::aMsg,U_Str2Base(::aStr[::_x],16))
+    Next
+    ::cXor:= ::ResultadoChecksum()
+
+return ::cXor
+
+METHOD ResultadoChecksum() class CHECKSUM
+    self:nCurrentLine:=1
+    self:nLine:=1
+    self:nLin:=__HexToDec("33") //linha da impressora em hexadecimal caractere convertida para decimal numerico
+    self:aXor:={{},{},{}}
+    self:_n:=1
+    self:nXor
+    self:vXor:=""
+    self:_z:=0
+    self:_y:=0
+    self:aCheck:={{},{},{}}
+    self:cCheck:=::aMsg[1]+::aMsg[2]
+    self:cXor
+    self:_Msg:=""
+    self:cCheck1:=""
+    self:cCheck2:=""
+    self:cCheck3:=""
+    self:cRetStr:=::aMsg[1]
+    Self:nLengVar
+    Self:nLenght
+    //FORMATA A FRASE EM HEXA PARA UM ARRAY
+    For ::_z:=1 to 3
+        if ::_z<4
+            ::cRetStr:=::aMsg[::_z]
+            For ::nCurrentLine:=1 to len( ::cRetStr)
+                AADD(::aXor[::_z],SubStr( ::cRetStr,::nCurrentLine,2))
+                ::nCurrentLine++
+            Next
+        Endif
+    Next
+    ::nCurrentLine:=1
+    //BUSCA O VALOR DECIMAL NUMERICO DO CÓDIGO HEXADECIMAL CARACTERE CORRESPONDENTE
+    For ::_z:=1 to 3
+        if ::_z<4
+            For ::nLine :=1 to len(::aXor[::_z])
+                aadd(::aCheck[::_z],__HEXTODEC(::aXor[::_z][::nLine]))
+            next
+        endif
+    next
+        //FORMATA O ARRAY
+    for ::_z:=1 to len(::aCheck)
+        if ::_z<4
+            For ::nLine :=1 to len(::aXor[::_z])
+                &("::cCheck"+cValToChar(::_z))+cValToChar(::aCheck[::_z][::nLine])+","
+            Next
+        Endif
+    Next
+    //DEFINE O LENGHT DA VARIAVEL ISOLADA EM VALOR DECIMAL
+    ::nLengVar:=cValToChar(len(::aCheck[1])+len(::aCheck[3]))
+    //DEFINE O LENGHT TOTAL EM VALOR DECIMAL
+    ::nLenght:=cValToChar(len(::aCheck[1])+len(::aCheck[3])+10)
+    //PREPARA PARA O CALCULO XOR DO CHECKSUM
+    ::cXor:="232,0,"+::nLenght +",1,0,"+cValToChar((len(::aMsg[1])/2))+","+ alltrim(::cCheck1)+"2,0,1,"+cValToChar(::cCheck2) +",3,0,"+cValToChar(len(::aMsg[3])/2)+","+::cCheck3
+    //UTILIZO MACROEXECUÇÃO PARA FAZER A FUNÇÃO
+    ::cXor:= "nXor("+::cXor+")"
+    //CHAMO A MACROEXECUÇÃO
+    ::nXor:=&(::cXor)
+    //FORMATO O BYTE RETORNADO E CONVERTO EM HEXADECIMAL
+    ::cXor:=Upper(__DecToHex(::nXor))
+    //CONVERTO O LENGHT EM HEXADECIMAL
+    ::nLenght:=Upper(__DecToHex(Val(::nLenght)))
+    //CONVERTE O LENGHT DA VARIAVEL EM HEXADECIMAL
+    ::nLengVar:=Upper(__DecToHex(Val(::nLengVar)))
+    //CONVERTE O VALOR DA LINHA DE PRODUÇÃO PARA HEXADECIMAL
+    ::nLin:=__DecToHex(::aCheck[2][1])
+    //FORMATA A FRASE PARA ADICIONAR ESPAÇO ENTRE CADA BYTE DA MENSAGEM
+    ::cCheck1 :=""
+    ::cCheck2 :=""
+    ::cCheck3 :=""
+
+    For ::_z:=1 to 3
+        if ::_z<4
+            For ::nCurrentLine:=1 to len(::aMsg[::_z])
+                &("Self:cCheck"+cValToChar(&("Self:_z"))) += SubStr(::aMsg[::_z],::nCurrentLine,2)+" "
+                ::nCurrentLine++
+            Next
+        Endif
+    Next
+    //CRIA A MENSAGEM PARA ENVIO
+    ::_Msg:="E8 00 "+upper(::nLenght)+ " 01 00 "+Upper(__DecToHex((len(::aMsg[1])/2)))+" "+alltrim(::cCheck1)+" 02 00 01 "+alltrim(::cCheck2)+" "+"03 00 "+IIF(Len(Upper(__DecToHex((len(::aMsg[3])/2))))==1,"0"+Upper(__DecToHex((len(::aMsg[3])/2))),Upper(__DecToHex((len(::aMsg[3])/2))))+" "+alltrim(::cCheck3)+" "+::cXor
+
+Return ::_Msg

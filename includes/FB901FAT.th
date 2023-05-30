@@ -1,0 +1,79 @@
+#Include "TOTVS.CH"
+#include "TOPCONN.CH"
+#Include "RWMAKE.CH"
+#Include "REPORT.CH"
+#INCLUDE 'tlpp-object.th'
+#INCLUDE 'tlpp-core.th'
+#INCLUDE 'tlpp-probat.th'
+#INCLUDE 'MSOBJECT.CH'
+
+Interface QueryConvert
+    Method Query4Array()
+EndInterface
+
+/*/{Protheus.doc} Query2Array
+description
+@type class
+@version  
+@author D.Miguel
+@since 2/12/2023
+/*/
+Class Query2Array from QueryConvert
+    PUBLIC Data _x
+    PUBLIC Data _z
+    PUBLIC Data _aLinha
+    PUBLIC Data _aArray
+    PUBLIC Data _nRecCount
+    PUBLIC Data _aAreaQry
+    PUBLIC Data cQuery
+
+    PUBLIC method new() Constructor
+    PUBLIC method Query4Array() Constructor
+
+ENDCLASS
+
+
+method new() class Query2Array
+return self
+
+method Query4Array() class Query2Array
+Local _x      := 1
+Local _z      := 1
+::_aLinha     := {}
+::_aArray     := {}
+::_nRecCount  := 0
+
+::_aAreaQry   := {}
+
+   // Executa a query para saber quais os campos retornados.
+
+TCQUERY ::cQuery NEW ALIAS "QRY"
+count to ::_nRecCount
+
+
+   // Passa dados para a array
+
+::_aArray = {}
+aadd(::_aArray,)
+::_aArray[_x] := {}
+
+    QRY->(dbgotop())
+    do while !QRY->(eof())
+        aadd (_aLinha,{QRY->C5_NUM, cValToChar(QRY->C5_EMISSAO), cValToChar(STOD(QRY->C6_ENTREG)), QRY->A1_COD, QRY->C5_CONDPAG, QRY->A3_NOME, QRY->A1_ZOBS3, QRY->A1_NOME, Alltrim(QRY->A1_END) +","+Alltrim(QRY->A1_MUN) +","+Alltrim(QRY->A1_EST), QRY->A1_CGC, QRY->C6_ITEM, QRY->C6_CF, QRY->C6_PRODUTO, Alltrim(QRY->C6_DESCRI) +CHR(13)+CHR(10)+Alltrim(QRY->C6_ZTXTPAD), cValToChar(QRY->C6_QTDVEN), QRY->C6_UM, cValToChar(QRY->C6_PRCVEN), cValToChar(QRY->C6_VALOR), cValToChar(QRY->B1_IPI), QRY->A4_NOME, QRY->A4_DDD +"-"+ QRY->A4_TEL, QRY->C5_TPFRETE, QRY->C5_REDESP, "0", cValToCHar(QRY->C6_QTDVEN), "0", cValToChar(QRY->C5_FRETE), cvalToChar(QRY->C5_SEGURO), +cvalToChar(QRY->C5_DESPESA), cValToCHar(1), UsrFullName(RetCodUsr())})
+		QRY->(dbskip())
+	Enddo
+	QRY->(dbgotop())
+	aadd(::_aArray[1], aclone (::_aLinha[1]))
+	For _x:= 1 to len(::_aLinha)
+		If _x < len(::_aLinha)
+			if ::_aLinha[_x][1] == ::_aLinha[_x+1][1]
+				aadd(::_aArray[_z],aclone (::_aLinha[_x+1]))
+			Else
+				aadd(::_aArray,)
+				::_aArray[_z+1] := {}
+				aadd(::_aArray[_z+1], clone (::_aLinha[_x+1]))
+				_z++
+			Endif
+		Endif
+	Next
+return ::_aArray

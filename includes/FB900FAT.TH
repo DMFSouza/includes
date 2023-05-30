@@ -1,0 +1,641 @@
+#Include "TOTVS.CH"
+#include "TOPCONN.CH"
+#Include "RWMAKE.CH"
+#Include "REPORT.CH"
+#INCLUDE 'tlpp-object.th'
+#INCLUDE 'tlpp-core.th'
+#INCLUDE 'tlpp-probat.th'
+#INCLUDE 'MSOBJECT.CH'
+
+Interface PedidoVenda
+    Method FontsFromReport()
+EndInterface
+/*/{Protheus.doc} RelatorioPV
+description
+@type class
+@author D.Miguel
+@since 2/12/2023
+/*/
+Class RelatorioPV from PedidoVenda
+	PUBLIC Data oArial09	as object
+	PUBLIC Data oArial10	as object
+	PUBLIC Data oArial12    as object
+	PUBLIC Data oArial12B   as object
+	PUBLIC Data oArial14B   as object
+	PUBLIC Data oArial14    as object
+	PUBLIC Data oArial16    as object
+	PUBLIC Data oArial16B   as object
+	PUBLIC Data oArial18B   as object
+	PUBLIC Data oArial24B   as object
+	PUBLIC Data oArial28B   as object
+
+	PUBLIC Data oPrn        as object
+    
+	PUBLIC Data STR01       as character
+	PUBLIC Data STR02       as character
+	PUBLIC Data STR03       as character
+	PUBLIC Data STR04       as character
+	PUBLIC Data STR05       as character
+	PUBLIC Data STR06       as character
+	PUBLIC Data STR07       as character //"Numero:"
+        PUBLIC Data STR77   as character
+	PUBLIC Data STR08       as character //"Data Emissao:"
+        PUBLIC Data STR88   as character
+	PUBLIC Data STR09       as character //"Data Embarque:"
+        PUBLIC Data STR99   as character
+	PUBLIC Data STR10       as character //"Docto Cliente:"
+        PUBLIC Data STR100  as character
+	PUBLIC Data STR11       as character //"Cond. Pagto:"
+        PUBLIC Data STR111  as character 
+	PUBLIC Data STR12       as character//"Vendedor:"
+        PUBLIC Data STR122  as character 
+	PUBLIC Data STR13       as character//"Obs Cliente:"
+        PUBLIC Data STR133  as character
+	PUBLIC Data STR14       as character
+	PUBLIC Data STR15       as character //"Dados do Cliente:"
+        PUBLIC Data STR155  as character
+	PUBLIC Data STR16       as character //"Razao Social:"
+        PUBLIC Data STR166  as character
+	PUBLIC Data STR17       as character //"Endereco:"
+        PUBLIC Data STR177  as character
+	PUBLIC Data STR18       as character //"CNPJ e IE"
+        PUBLIC Data STR188   as character
+	PUBLIC Data STR19       as character 
+	PUBLIC Data STR20       as character //"Item"
+        PUBLIC Data STR200  as character
+	PUBLIC Data STR21       as character //"CFOP"
+        PUBLIC Data STR211  as character
+	PUBLIC Data STR22       as character //"Codigo"
+        PUBLIC Data STR222  as character
+	PUBLIC Data STR23       as character //"Descricao do Produto"
+        PUBLIC Data STR233  as character
+	PUBLIC Data STR24       as character //"Qtde"
+        PUBLIC Data STR244  as character
+	PUBLIC Data STR25       as character //"UM"
+        PUBLIC Data STR255  as character
+	PUBLIC Data STR26       as character //"Preco Unit(R$)"
+        PUBLIC Data STR266  as character
+	PUBLIC Data STR27       as character //"Valor Total sem IPI"
+        PUBLIC Data STR277  as character
+	PUBLIC Data STR28       as character //"IPI (R$)" 
+        PUBLIC Data STR288  as character
+	PUBLIC Data STR29       as character
+	PUBLIC Data STR30       as character //"Transp:"
+        PUBLIC Data STR300  as character
+	PUBLIC Data STR31       as character //"Fone:"
+        PUBLIC Data STR311  as character 
+	PUBLIC Data STR32       as character //"Tipo Frete:"
+        PUBLIC Data STR322  as character
+	PUBLIC Data STR33       as character //"Redespacho:"
+        PUBLIC Data STR333  as character 
+	PUBLIC Data STR34       as character
+	PUBLIC Data STR35       as character //"Total Liquido:"
+        PUBLIC Data STR355  as character 
+	PUBLIC Data STR36       as character //"Total Qtdes:"
+        PUBLIC Data STR366  as character 
+	PUBLIC Data STR37       as character //"Valor ST:"
+        PUBLIC Data STR377  as character
+	PUBLIC Data STR38       as character //"Valor Frete:"
+        PUBLIC Data STR388  as character
+	PUBLIC Data STR39       as character //"Valor Seguro:"
+        PUBLIC Data STR399  as character
+	PUBLIC Data STR40       as character //"Valor Total:"
+        PUBLIC Data STR400  as character
+	PUBLIC Data STR41       as character
+	PUBLIC Data STR42       as character
+	PUBLIC Data STR43       as character
+	PUBLIC Data STR44       as character
+	PUBLIC Data STR45       as character
+	PUBLIC Data STR46       as character
+	PUBLIC Data STR47       as character
+	PUBLIC Data STR48       as character
+	PUBLIC Data STR49       as character
+	PUBLIC Data STR50       as character
+	PUBLIC Data STR51       as character //"Pagina:"
+        PUBLIC Data STR511       as numeric
+	PUBLIC Data STR52       as character //"Usuario:"
+        PUBLIC Data STR522       as character
+
+
+
+    PUBLIC Data cDiretorio    as character
+    PUBLIC Data cData         as character
+    PUBLIC Data cTime         as character
+    PUBLIC Data cTitulo       as character
+    PUBLIC Data nColMax       as numeric
+	PUBLIC Data nLinha 		  as numeric
+	PUBLIC Data nLinhaIni     as numeric
+	PUBLIC Data nNvLinha 	  as numeric
+	PUBLIC Data aDados		  as Array
+	PUBLIC Data Quantidade    as numeric
+	PUBLIC Data ValorTotal    as numeric
+	PUBLIC Data ValorTotalEpi as numeric
+	PUBLIC Data cTipoFrete	  as character
+	PUBLIC Data ValorST		  as numeric
+	PUBLIC Data Resto         as numeric
+
+
+	PUBLIC Method FontsFromReport() Constructor
+	PUBLIC Method ImprimeRelatorio() Constructor
+    PUBLIC Method CABECALHO() Constructor
+    PUBLIC Method PRODUTO() Constructor
+    PUBLIC Method RODAPE() Constructor
+    PUBLIC Method FIM() Constructor
+	PUBLIC Method NOVAPAGINA() Constructor
+	PUBLIC Method QuebraProdutos() Constructor
+    PUBLIC method new() Constructor
+	PUBLIC Method ValorMonetario() Constructor
+	PUBLIC Method CalculoIPI() Constructor
+	PUBLIC Method ValorTotal() Constructor
+	PUBLIC Method BoxDeProdutos() Constructor
+	PUBLIC Method FRETE() Constructor
+EndClass
+
+method new() class RelatorioPV
+
+return self
+Method FontsFromReport() Class RelatorioPV
+
+    Self:cTitulo     := DTOS(Date()) + "_"+STRTRAN(time(),":","_") //NOME QUE SERÁ SALVO O ARQUIVO
+    Self:nColMax     := 1750
+
+	DEFINE FONT ::oArial09  NAME "Arial" SIZE 0,9 OF ::oPrn
+	DEFINE FONT ::oArial10  NAME "Arial" SIZE 0,10 OF ::oPrn
+	DEFINE FONT ::oArial12B NAME "Arial" SIZE 0,12 OF ::oPrn BOLD
+    DEFINE FONT ::oArial12  NAME "Arial" SIZE 0,12 OF ::oPrn
+	DEFINE FONT ::oArial14B NAME "Arial" SIZE 0,14 OF ::oPrn BOLD
+    DEFINE FONT ::oArial14  NAME "Arial" SIZE 0,14 OF ::oPrn
+	DEFINE FONT ::oArial16B NAME "Arial" SIZE 0,16 OF ::oPrn BOLD
+	DEFINE FONT ::oArial16  NAME "Arial" SIZE 0,16 OF ::oPrn BOLD
+	DEFINE FONT ::oArial18B NAME "Arial" SIZE 0,18 OF ::oPrn BOLD
+	DEFINE FONT ::oArial24B NAME "Arial" SIZE 0,24 OF ::oPrn BOLD
+	DEFINE FONT ::oArial28B NAME "Arial" SIZE 0,28 OF ::oPrn BOLD
+
+    ::ImprimeRelatorio()
+
+Return Self
+
+Method ImprimeRelatorio() Class RelatorioPV
+	Local count  :=1 
+	Local Count2 :=1 
+    Self:STR01      := "MANTOVA INDUSTRIA DE TUBOS PLASTICOS LTDA
+    Self:STR02      := "RUA ISIDORO FADANELLI, 194"
+    Self:STR03      := "TEL:(54)3224-4303"
+    Self:STR04      := "CNPJ:73.694.119/0001-85"
+    Self:STR05      := "PEDIDO DE VENDA"
+    Self:STR06      := "GERAL"
+    Self:STR07      := "Numero:"
+    Self:STR08      := "Data Emissao:"
+    Self:STR09      := "Data Embarque:"
+    Self:STR10      := "Docto Cliente:"
+    Self:STR11      := "Cond. Pagto:"
+    Self:STR12      := "Vendedor:"
+    Self:STR13      := "Obs Cliente:"
+    Self:STR14      := "CLIENTE"
+    Self:STR15      := "Dados do Cliente:"
+    Self:STR16      := "Razao Social:"
+    Self:STR17      := "Endereco:"
+    Self:STR18      := "CNPJ"
+    Self:STR19      := "PRODUTOS"
+    Self:STR20      := "Item"
+    Self:STR21      := "CFOP"
+    Self:STR22      := "Codigo"
+    Self:STR23      := "Descricao do Produto"
+    Self:STR24      := "Qtde"
+    Self:STR25      := "UM"
+    Self:STR26      := "Preco Unit(R$)"
+    Self:STR27      := "Valor Total sem IPI(R$)"
+    Self:STR28      := "IPI (R$)"
+    Self:STR29      := "FRETE"
+    Self:STR30      := "Transp:"
+    Self:STR31      := "Fone:"
+    Self:STR32      := "Tipo Frete:"
+    Self:STR33      := "Redespacho:"
+    Self:STR34      := "TOTAIS"
+    Self:STR35      := "Total Liquido:"
+    Self:STR36      := "Total Qtd:"
+    Self:STR37      := "Valor ST:"
+    Self:STR38      := "Valor Frete:"
+    Self:STR39      := "Valor Seguro:"
+    Self:STR40      := "Valor Total:"
+    Self:STR41      := "Emitente:"
+    Self:STR42      := "Aceite PCP:"
+    Self:STR43      := "Volumes:"
+    Self:STR44      := "Conferente:"
+    Self:STR45      := "Expedicao:"
+    Self:STR46      := "NF:"
+    Self:STR47      := "Negociacao c/ PCP em:"
+    Self:STR48      := "N/A"
+    Self:STR49      := "Conf.Exp:"
+    Self:STR50      := "Faturado em:"
+    Self:STR51      := "Pagina:"
+    Self:STR52      := "Usuario:"
+
+
+	Self:nLinha:= 1200
+	Self:nNvLinha:=1200 
+	
+
+
+    ::oPrn          := FWMsPrinter():New(::cTitulo, 6, .T., , .T., , , , , .F., , .T.,)
+    ::oPrn:SetPortrait()
+    ::oPrn:cPathPDF := ::cDiretorio
+    ::cDiretorio := ::oPrn:cPathPDF
+    ::oPrn:SetPaperSize(DMPAPER_A4) //TAMANHO DA FOLHA
+    ::oPrn:SetMargin(60, 60, 60, 60) //MARGEM
+	
+
+For count := 1 to len(::aDados)
+
+	
+	::STR77 := ::aDados[count][count2][1] 
+	::STR88 := cvalToChar(STOD(::aDados[count][count2][2])) 
+	::STR99 := ::aDados[count][count2][3] //DT EMBARQUE
+	::STR100:= ::aDados[count][count2][4] //DCTO CLIENTE
+	::STR111:= ::aDados[count][count2][5] 
+	::STR122:= ::aDados[count][count2][6] //"Vendedor:"
+	::STR133:= ::aDados[count][count2][7] 
+	::STR166:= ::aDados[count][count2][8] //"Razao Social:"
+	::STR177:= ::aDados[count][count2][9] //"Endereco:"
+	::STR188:= ::aDados[count][count2][10]//"CNPJ e IE"
+	::CABECALHO(count)
+	::nLinha:= 1200
+	::nNvLinha:=1200 
+Next
+::FIM()
+Return Self
+
+
+Method CABECALHO(count) Class RelatorioPV
+
+	::oPrn:StartPage()
+
+
+	::oPrn:SayAlign(100,140,::STR01,::oArial12,2200, 200,, 0,0 ) //"MANTOVA INDU::STRIA DE TUBOS PLASTICOS LTDA"
+	::oPrn:SayAlign(130,140,::STR02,::oArial12,2200, 200,, 0, 0 ) //"RUA ISIDORO FADANELLI, 194"
+	::oPrn:SayAlign(160,140,::STR03,::oArial12,2200, 200,, 0,0 ) //"TEL:5432244303"
+	::oPrn:SayAlign(190,140,::STR04,::oArial12,2200, 200,, 0,0 ) //"CNPJ:73.694.119/0001-85"
+	::oPrn:SayAlign(190,0,::STR05,::oArial12B,2200,200,, 2,1 ) //"PEDIDO DE VENDA"
+	
+	::oPrn:Line(0225,0000,0225,2200)
+	::oPrn:SayAlign(225,0,::STR06,::oArial12B,2200, 200,, 0,0 ) // "GERAL"
+	::oPrn:Box(275, 10, 710, 2200,)
+
+	::oPrn:SayAlign(300,050,::STR07,::oArial12,0150, 200,, 1,0 ) //"Numero:"
+		::oPrn:Box(290, 210, 340, 490,)
+			::oPrn:SayAlign(300,220,::STR77,::oArial12,0200, 200,, 0,0 )
+	::oPrn:SayAlign(300,500,::STR08,::oArial12,2200, 200,, 0,0 ) // "Data Emissao:"
+		::oPrn:Box(290, 740, 340,1390,)
+			::oPrn:SayAlign(300,745,::STR88,::oArial12,600, 200,, 2,0 )
+	::oPrn:SayAlign(300,1400,::STR09,::oArial12B,2200, 200,,0,0 ) // "Data Embarque:"
+		::oPrn:Box(290, 1650, 340, 2190,)
+			::oPrn:SayAlign(300,1675,::STR99,::oArial12B,450, 200,,2,0 )
+	::oPrn:SayAlign(375,030,::STR10,::oArial12,2200, 200,, 0,0 ) //"Docto Cliente:"
+		::oPrn:Box(365, 210, 415, 740,)
+			::oPrn:SayAlign(375,220,::STR100,::oArial12,200, 200,, 0,0 )
+	::oPrn:SayAlign(375,750,::STR11,::oArial12,2200, 200,, 0,0 ) // "Cond. Pagto:"
+		::oPrn:Box(365, 1000, 415, 2190,)
+			::oPrn:SayAlign(375,1020,::STR111,::oArial12,1000, 100,, 0,0 )
+	::oPrn:SayAlign(450,050,::STR12,::oArial12,0150, 200,, 1,0 ) // "Vendedor:"
+		::oPrn:Box(440, 210, 490, 2190,)
+			::oPrn:SayAlign(450,220,::STR122,::oArial12,2200, 50,, 0,0 )
+	::oPrn:SayAlign(500,0,::STR13,::oArial12,0150, 200,, 1,0 ) //"Obs Cliente:"
+		::oPrn:Box(500, 210, 700, 2190,)
+			::oPrn:SayAlign(520,220,::STR133,::oArial12,2000,200,, 0,0 )
+
+	::oPrn:SayAlign(725,0,::STR14,::oArial12B,2200, 200,, 0,0 ) //"CLIENTE"
+	::oPrn:Box(775, 10, 950, 2200,)
+	::oPrn:SayAlign(800,050,::STR16,::oArial12,2200, 200,, 0,0 ) //"Razao Social:"
+		::oPrn:SayAlign(800,250,::STR166,::oArial12,2200, 200,, 0,0 )	
+	::oPrn:SayAlign(850,050,::STR17,::oArial12,2200, 200,, 0,0 ) //"Endereco:"
+		::oPrn:SayAlign(850,250,::STR177,::oArial12,2200, 200,, 0,0 )	
+	::oPrn:SayAlign(900,050,::STR18,::oArial12,2200, 200,, 0,0 ) //"CNPJ e IE"
+		::oPrn:SayAlign(900,250,TRANSFORM(::STR188,"@99.999.999/9999-99"),::oArial12,2200, 200,, 0,0 )	
+
+	::nLinha+=134*len(::aDados[count])
+	if ::nLinha >2830
+		::Resto:= ::nLinha-2240
+		::nLinha:= 2830
+		::nLinhaIni:=1090
+	Else
+		::nLinhaIni:=1090
+	endif
+	::BoxDeProdutos(count)
+Return Self
+
+Method BoxDeProdutos(count) Class RelatorioPV
+	Local count2
+
+	::oPrn:Box(::nLinhaIni, 10,::nLinha, 2200,)
+	::nLinhaIni+=60
+	::oPrn:Line(::nLinhaIni,10,1150,2199)
+	::nLinhaIni-=60
+	::oPrn:Line(::nLinhaIni,0135,::nLinha-1,135)
+	::oPrn:Line(::nLinhaIni,0225,::nLinha-1,225)
+	::oPrn:Line(::nLinhaIni,0525,::nLinha-1,0525)
+	::oPrn:Line(::nLinhaIni,1280,::nLinha-1,1280)
+	::oPrn:Line(::nLinhaIni,1425,::nLinha-1,1425)
+	::oPrn:Line(::nLinhaIni,1500,::nLinha-1,1500)
+	::oPrn:Line(::nLinhaIni,1725,::nLinha-1,1725)
+	::oPrn:Line(::nLinhaIni,2050,::nLinha-1,2050)
+	::nLinhaIni-=40
+    ::oPrn:SayAlign(::nLinhaIni,0,::STR19,::oArial12B,2200, 200,, 0,0 ) //"PRODUTOS"
+	::nLinhaIni+=50
+	::oPrn:SayAlign(::nLinhaIni,50,::STR20,::oArial12,2200, 200,, 0,0 ) //ITEM	
+	::oPrn:SayAlign(::nLinhaIni,140,::STR21,::oArial12,2200, 200,, 0,0 ) //"CFOP"
+	::oPrn:SayAlign(::nLinhaIni,300,::STR22,::oArial12,2200, 200,, 0,0 ) //"Codigo"
+	::oPrn:SayAlign(::nLinhaIni,550,::STR23,::oArial12B,2200, 200,, 0,0 ) //"Descricao do Produto"
+	::oPrn:SayAlign(::nLinhaIni,1325,::STR24,::oArial12B,2200, 200,, 0,0 ) //"Qtde"
+	::oPrn:SayAlign(::nLinhaIni,1435,::STR25,::oArial12B,2200, 200,, 0,0 ) //"UM"
+	::oPrn:SayAlign(::nLinhaIni,1510,::STR26,::oArial12B,2200, 200,, 0,0 ) //"Preco Unit(R$)"
+	::oPrn:SayAlign(::nLinhaIni,1735,::STR27,::oArial12B,2200, 200,, 0,0 ) //"Valor Total sem IPI"
+	::oPrn:SayAlign(::nLinhaIni,2070,::STR28,::oArial12B,2200, 200,, 0,0 ) //"IPI (R$)" 
+
+	
+		For count2:=1 to len(::aDados[count])
+			if count2 <= len(::aDados[count])
+
+				::STR200:= ::aDados[count][count2][11]//"Item"
+				::STR211:= ::aDados[count][count2][12]//"CFOP"
+				::STR222:= ::aDados[count][count2][13]//"Codigo",
+				::STR233:= ::aDados[count][count2][14]//"Descricao do Produto"
+				::STR244:= ::ValorMonetario(::aDados[count][count2][15])//"Qtde"
+				::STR255:= ::aDados[count][count2][16]//"UM"
+				::STR266:= ::ValorMonetario(::aDados[count][count2][17])//"Preco Unit(R$)"
+				::STR277:= ::ValorTotal(::aDados[count][count2][18])//"Valor Total sem IPI"
+				::STR288:= ::ValorMonetario(::calculoIPI(::aDados[count][count2][18],::aDados[count][count2][19]))//"IPI (R$)"
+				::PRODUTO(count,count2)	
+				::nNvLinha+=140
+				::Quantidade+=val(::aDados[count][count2][15])
+				::ValorTotal+=val(::aDados[count][count2][18])
+				::ValorTotalEpi+=Val(::aDados[count][count2][19])
+				::ValorST+=Val(::aDados[count][count2][26])
+			Endif
+		::FRETE(count,count2)	
+		Next
+	::RODAPE(count)		
+					
+	count2:=1
+	::Quantidade:=0
+	::ValorTotal:=0
+	::ValorTotalEpi:=0
+	::STR511:=0
+Return Self
+
+Method PRODUTO(count,count2) Class RelatorioPV
+
+			::oPrn:SayAlign(::nNvLinha,50,::STR200,::oArial12,2200, 200,, 0,0 )		
+			::oPrn:SayAlign(::nNvLinha,140,::STR211,::oArial12B,2200, 200,, 0,0 ) 		
+			::oPrn:SayAlign(::nNvLinha,245,::STR222,::oArial12B,2200, 200,, 0,0 )		
+			::oPrn:SayAlign(::nNvLinha-45,550,::STR233,::oArial09,700, 200,, 0,0 )
+	
+			::oPrn:SayAlign(::nNvLinha,1325,::STR244,::oArial12,2200, 200,, 0,0 ) 		
+			::oPrn:SayAlign(::nNvLinha,1435,::STR255,::oArial12,2200, 200,, 0,0 ) 
+			::oPrn:SayAlign(::nNvLinha,1510,::STR266,::oArial12,2200, 200,, 0,0 ) 
+			::oPrn:SayAlign(::nNvLinha,1735,::STR277,::oArial12,2200, 200,, 0,0 ) 
+			::oPrn:SayAlign(::nNvLinha,2070,::STR288,::oArial12,2200, 200,, 0,0 )
+			
+			//If len(::STR233) >150
+			//	::oPrn:Line(::nNvLinha,10,::nNvLinha,2199)
+			//else
+				IIF(count2==1,::oPrn:Line(::nNvLinha+60,10,::nNvLinha+60,2199),::oPrn:Line(::nNvLinha+90,10,::nNvLinha+90,2199))
+			//Endif
+
+		IF ::nNvLinha>=2740
+			::QuebraProdutos()
+		ENDIF
+Return Self
+
+Method FRETE(count,count2) Class RelatorioPv
+		
+		::STR300:= ::aDados[count][count2][20]//"Transp:"
+		::STR311:= ::aDados[count][count2][21]//"Fone:"
+		if ::aDados[count][count2][22] == "C" 
+			::cTipoFrete := "CIF"
+		ElseIf	::aDados[count][count2][22] == "F" 
+			::cTipoFrete := "FOB
+		ElseIf ::aDados[count][count2][22] == "T" 
+			::cTipoFrete := "P.C de terceiros" 
+		ElseIf	::aDados[count][count2][22] == "R" 
+			::cTipoFrete := "P.C remetente" 
+		ElseIf	::aDados[count][count2][22] == "D" 
+			::cTipoFrete := "P.C destinatário"
+		ElseIf	::aDados[count][count2][22] == "S" 
+			::cTipoFrete := "Sem frete"
+		Endif
+		::STR322:= ::cTipoFrete				  //"Tipo Frete:"
+		::STR333:= ::aDados[count][count2][23]//"Redespacho:"
+		::STR355:= ::aDados[count][count2][24]//"Total Liquido:"
+		::STR366:= ::aDados[count][count2][25]//"Total Qtdes:"
+		::STR388:= ::aDados[count][count2][27]//"Valor Frete:"
+		::STR399:= ::aDados[count][count2][28]//"Valor Seguro:
+		::STR400:= ::aDados[count][count2][29]//"Valor Total:"
+		::STR522:= ::aDados[count][count2][31]//"Usuario:"
+		
+
+Return Self
+Method RODAPE() Class RelatorioPv
+	::STR377:= cValToChar(::ValorST)			  //"Valor ST:"
+	if ::nNvLinha>2100
+		::NOVAPAGINA()
+	Else
+	 	::nNvLinha:=2100
+	ENDIF
+        ::oPrn:SayAlign(::nNvLinha,0,::STR29,::oArial12B,2200, 200,, 0,0 ) //"FRETE"
+		::oPrn:Box(::nNvLinha+50, 10,::nNvLinha+195, 2200,)
+		::nNvLinha+=75
+		::oPrn:SayAlign(::nNvLinha,095,::STR30,::oArial12,2200, 200,, 0,0 ) //"Transp:"
+			::oPrn:Box(::nNvLinha-10, 210, ::nNvLinha+45, 1300,)
+				::oPrn:SayAlign(::nNvLinha,220,::STR300,::oArial12,2200, 200,, 0,0 ) //"Transp:"
+		::oPrn:SayAlign(::nNvLinha,1350,::STR31,::oArial12,2200, 200,, 0,0 ) //"Fone:"
+			::oPrn:Box(::nNvLinha-10, 1450, ::nNvLinha+45, 1750,)
+				::oPrn:SayAlign(::nNvLinha,1470,::STR311,::oArial12,2200, 200,, 0,0 ) //"Fone:"
+		::oPrn:SayAlign(::nNvLinha,1800,::STR32,::oArial12,2200, 200,, 0,0 ) //"Tipo Frete:"
+			::oPrn:Box(::nNvLinha-10, 1950, ::nNvLinha+45, 2190,)
+				::oPrn:SayAlign(::nNvLinha,1970,::STR322,::oArial12,2200, 200,, 0,0 )
+		::nNvLinha+=50
+		::oPrn:SayAlign(::nNvLinha,030,::STR33,::oArial12,2200, 200,, 0,0 ) //"Redespacho:"
+			::oPrn:Box(::nNvLinha, 210,::nNvLinha+55, 2190,)
+				::oPrn:SayAlign(::nNvLinha,220,::STR333,::oArial12,2200, 200,, 0,0 )
+
+
+		::nNvLinha+=100
+		::oPrn:SayAlign(::nNvLinha,0,::STR34,::oArial12B,2200, 200,, 0,0 ) //"TOTAIS"
+		::oPrn:Box(::nNvLinha+50, 10,::nNvLinha+265, 2200,)
+		::nNvLinha+=75
+		::oPrn:SayAlign(::nNvLinha,050,::STR35,::oArial12,2200, 200,, 0,0 ) //"Total Liquido:"
+			::oPrn:Box(::nNvLinha-10, 230,::nNvLinha+40, 560,)
+				::oPrn:SayAlign(::nNvLinha,250,"R$"+::ValorMonetario(cValToChar(::ValorTotal)),::oArial12,300, 200,, 1,0 )
+		::oPrn:SayAlign(::nNvLinha,600,::STR36,::oArial12,2200, 200,, 0,0 ) //"Total Qtdes:"
+			::oPrn:Box(::nNvLinha-10, 800,::nNvLinha+40, 1130,)
+				::oPrn:SayAlign(::nNvLinha,820,::ValorMonetario(cValToChar(::Quantidade)),::oArial12,300, 200,, 1,0 )
+		::nNvLinha+=50
+		::oPrn:SayAlign(::nNvLinha ,090,::STR37,::oArial12,2200, 200,, 0,0 ) //"Valor ST:"
+			::oPrn:Box(::nNvLinha, 230, ::nNvLinha+50, 560,)
+				::oPrn:SayAlign(::nNvLinha+5 ,250,"R$"+::ValorMonetario(::STR377),::oArial12,300, 200,, 1,0 )
+		::oPrn:SayAlign(::nNvLinha+5,600,::STR38,::oArial12,2200, 200,, 0,0 ) //"Valor Frete:"
+			::oPrn:Box(::nNvLinha, 800,::nNvLinha+50, 1130,)
+				::oPrn:SayAlign(::nNvLinha+5,820,"R$"+::ValorMonetario(::STR388),::oArial12,300, 200,, 1,0 )
+		::nNvLinha+=50
+		::oPrn:SayAlign(::nNvLinha,050,::STR39,::oArial12,2200, 200,, 0,0 ) //"Valor Seguro:"
+			::oPrn:Box(::nNvLinha+5, 230,::nNvLinha+60, 560,)
+				::oPrn:SayAlign(::nNvLinha+15,250,"R$"+::ValorMonetario(::STR399),::oArial12,300, 200,, 1,0 ) 
+		::oPrn:SayAlign(::nNvLinha,1500,::STR40,::oArial14B,2200, 200,, 0,0 ) //"Valor Total:"
+			::oPrn:Box(::nNvLinha-30, 1700,::nNvLinha+60, 2190,)
+				::oPrn:SayAlign(::nNvLinha-5,1720, "R$"+::ValorMonetario(cValToChar((::ValorTotal+::ValorTotalEpi+val(::STR377)+val(::STR399)+Val(::STR399)))),::oArial16B,450, 200,, 1,0 )
+		::nNvLinha+=100 
+		::oPrn:Box(::nNvLinha, 10,::nNvLinha+390, 2200,)
+		::nNvLinha+=50
+		::oPrn:SayAlign(::nNvLinha,0050,::STR41,::oArial12,2200, 200,, 0,0 ) //Emitente
+		::oPrn:Line(::nNvLinha+30,200,::nNvLinha+30,650)
+		::oPrn:SayAlign(::nNvLinha,0700,::STR42,::oArial12,2200, 200,, 0,0 ) //Aceite PCP 
+		::oPrn:Line(::nNvLinha+30,900,::nNvLinha+30,1660)
+		::oPrn:Line(::nNvLinha+25,1530,::nNvLinha+5,1540)
+		::oPrn:Line(::nNvLinha+25,1430,::nNvLinha+5,1440)
+		::oPrn:SayAlign(::nNvLinha,1675,::STR43,::oArial12,2200, 200,, 0,0 ) // Volumes
+		::oPrn:Line(::nNvLinha+30,1800,::nNvLinha+30,2185)
+		::nNvLinha+=150
+		::oPrn:SayAlign(::nNvLinha,0050,::STR44,::oArial12,2200, 200,, 0,0 ) //Conferente
+		::oPrn:Line(::nNvLinha+30,200,::nNvLinha+30,650)
+		::oPrn:SayAlign(::nNvLinha,0700,::STR45,::oArial12,2200, 200,, 0,0 ) //Expedicao
+		::oPrn:Line(::nNvLinha+30,900,::nNvLinha+30,1400)
+		::oPrn:SayAlign(::nNvLinha,1750,::STR46,::oArial12,2200, 200,, 0,0 ) //NF
+		::oPrn:Line(::nNvLinha+30,1800,::nNvLinha+30,2185)
+		::nNvLinha+=150
+		::oPrn:SayAlign(::nNvLinha,0050,::STR47,::oArial12,2200, 200,, 0,0 ) //Negociacao C/ PCP EM
+		::oPrn:Line(::nNvLinha+30,430,::nNvLinha+30,815)
+		::oPrn:Line(::nNvLinha+25,530,::nNvLinha+5,540)
+		::oPrn:Line(::nNvLinha+25,680,::nNvLinha+5,690)
+		::oPrn:SayAlign(::nNvLinha,900,::STR48,::oArial12,2200, 200,, 0,0 ) // N/A
+		::oPrn:Box(::nNvLinha-15, 830, ::nNvLinha+30,885,)
+		::oPrn:SayAlign(::nNvLinha,1000,::STR49,::oArial12,2200, 200,, 0,0 ) //Conf. Exp
+		::oPrn:Line(::nNvLinha+30,1150,::nNvLinha+30,1585)
+		::oPrn:SayAlign(::nNvLinha,1600,::STR50,::oArial12,2200, 200,, 0,0 ) //Faturado Em:
+		::oPrn:Line(::nNvLinha+30,1800,::nNvLinha+30,2185)
+		::oPrn:Line(::nNvLinha+25,1920,::nNvLinha+5,1930)
+		::oPrn:Line(::nNvLinha+25,2050,::nNvLinha+5,2060)
+		::oPrn:Line(3000,10,3000,2200)
+		::STR511++
+		::oPrn:SayAlign(3025,050,::STR51+cValToChar(::STR511),::oArial12,2200, 200,, 0,0 )
+		::oPrn:SayAlign(3025,350,::STR52+::STR522,::oArial12,2200, 200,, 0,0 )
+
+Return Self
+
+Method QuebraProdutos() Class RelatorioPv
+
+::oPrn:Line(3000,10,3000,2200)
+::oPrn:SayAlign(3025,050,::STR51+cValToChar(IIF(::STR511==0,::STR511+1,)),::oArial12,2200, 200,, 0,0 )
+::oPrn:SayAlign(3025,350,::STR52+::STR522,::oArial12,2200, 200,, 0,0 )
+::oPrn:EndPage()
+::oPrn:StartPage()
+::STR511++
+::nLinha   :=::Resto-10
+::nNvLinha :=100
+::nLinhaIni:=100
+::oPrn:Box(::nLinhaIni, 10,::nLinha, 2200,)
+::nLinhaIni+=60
+::oPrn:Line(::nLinhaIni,10,::nLinhaIni,2199)
+::nLinhaIni-=60
+::oPrn:Line(::nLinhaIni,0135,::nLinha-1,135)
+::oPrn:Line(::nLinhaIni,0225,::nLinha-1,225)
+::oPrn:Line(::nLinhaIni,0525,::nLinha-1,0525)
+::oPrn:Line(::nLinhaIni,1280,::nLinha-1,1280)
+::oPrn:Line(::nLinhaIni,1425,::nLinha-1,1425)
+::oPrn:Line(::nLinhaIni,1500,::nLinha-1,1500)
+::oPrn:Line(::nLinhaIni,1725,::nLinha-1,1725)
+::oPrn:Line(::nLinhaIni,2050,::nLinha-1,2050)
+::nLinhaIni-=40
+::oPrn:SayAlign(::nLinhaIni,0,::STR19,::oArial12B,2200, 200,, 0,0 ) //"PRODUTOS"
+::nLinhaIni+=50
+::oPrn:SayAlign(::nLinhaIni,50,::STR20,::oArial12,2200, 200,, 0,0 ) //ITEM	
+::oPrn:SayAlign(::nLinhaIni,140,::STR21,::oArial12,2200, 200,, 0,0 ) //"CFOP"
+::oPrn:SayAlign(::nLinhaIni,300,::STR22,::oArial12,2200, 200,, 0,0 ) //"Codigo"
+::oPrn:SayAlign(::nLinhaIni,550,::STR23,::oArial12B,2200, 200,, 0,0 ) //"Descricao do Produto"
+::oPrn:SayAlign(::nLinhaIni,1325,::STR24,::oArial12B,2200, 200,, 0,0 ) //"Qtde"
+::oPrn:SayAlign(::nLinhaIni,1435,::STR25,::oArial12B,2200, 200,, 0,0 ) //"UM"
+::oPrn:SayAlign(::nLinhaIni,1510,::STR26,::oArial12B,2200, 200,, 0,0 ) //"Preco Unit(R$)"
+::oPrn:SayAlign(::nLinhaIni,1735,::STR27,::oArial12B,2200, 200,, 0,0 ) //"Valor Total sem IPI"
+::oPrn:SayAlign(::nLinhaIni,2070,::STR28,::oArial12B,2200, 200,, 0,0 ) //"IPI (R$)" 
+Return Self
+
+Method NOVAPAGINA() Class RelatorioPv
+::STR511++
+::oPrn:Line(3000,10,3000,2200)
+::oPrn:SayAlign(3025,050,::STR51+cValToChar(::STR511),::oArial12,2200, 200,, 0,0 )
+::oPrn:SayAlign(3025,350,::STR52+::STR522,::oArial12,2200, 200,, 0,0 )
+::oPrn:EndPage()
+::oPrn:StartPage()
+::nNvLinha :=100
+::nLinhaIni:=100
+
+Return Self
+Method FIM() Class RelatorioPv
+::oPrn:EndPage()
+::oPrn:Preview() 
+Return Self
+
+Method ValorMonetario(cValor) Class RelatorioPv
+
+	Local nValor  as decimal
+    cValor 		:= strtran(cValor,",","")
+    nValor 		:= DEC_CREATE( cValor, 3, 2 )
+    cValor      := cValToChar(nValor)
+
+	if len(substr(cValor,1,at(".",cValor)-1)) == 5 .OR. len(strtran(cValor,".","")) ==5
+		cValor := StrTran(cValor,".",",",1,)
+		if val(cValor)>10000
+			cValor := Stuff(cValor,3,0,".")
+		Endif
+	elseif len(substr(cValor,1,at(".",cValor)-1)) == 4  .OR. len(strtran(cValor,".","")) ==4
+		cValor := StrTran(cValor,".",",",1,)
+		if val(cValor)>1000
+			cValor := Stuff(cValor,2,0,".")
+		Endif
+	Else
+		cValor := StrTran(cValor,".",",",1,)	
+	Endif
+
+
+	
+Return cValor 
+Method ValorTotal(cValor) Class RelatorioPv
+
+	Local nValor  as decimal
+    cValor 		:= strtran(cValor,",","")
+    nValor 		:= DEC_CREATE( cValor, 3, 2 )
+    cValor      := cValToChar(nValor)
+
+	if len(substr(cValor,1,at(".",cValor)-1)) == 5 .OR. len(strtran(cValor,".","")) ==5
+		cValor := StrTran(cValor,".",",",1,)
+		if val(cValor)>10000
+			cValor := Stuff(cValor,3,0,".")
+			if At(cValor, "," )==0
+				cValor := Stuff(cValor,len(cValor)+1,0,",00")
+			Endif
+		Endif
+	elseif len(substr(cValor,1,at(".",cValor)-1)) == 4  .OR. len(strtran(cValor,".","")) ==4
+		cValor := StrTran(cValor,".",",",1,)
+		if val(cValor)>1000
+			cValor := Stuff(cValor,2,0,".")
+			if At(cValor, "," )==0
+				cValor := Stuff(cValor,len(cValor)+1,0,",00")
+			Endif
+		Endif
+	Else
+		cValor := StrTran(cValor,".",",",1,)	
+		if At(cValor, "," )==0
+			cValor := Stuff(cValor,len(cValor)+1,0,",00")
+		Endif
+	Endif
+
+
+	
+Return cValor
+
+Method CalculoIPI(cValor,cIPI) Class RelatorioPv
+Local nValor:= val(cValor)
+nValor:=nValor*val(cIPI)
+nValor:= nValor / 100
+cValor:=cValToChar(nValor)
+
+Return cValor 
